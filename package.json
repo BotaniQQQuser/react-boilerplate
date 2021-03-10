@@ -4,7 +4,8 @@
   "description": "Simple React Boilerplate",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
+    "test:watch": "jest --watchAll",
     "start": "webpack serve --config webpack.config.js --progress --mode=development --env=development",
     "build": "webpack --config webpack.config.js --progress --mode=development"
   },
@@ -27,10 +28,15 @@
   },
   "devDependencies": {
     "@types/classnames": "^2.2.11",
+    "@types/enzyme": "^3.10.8",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
     "compression-webpack-plugin": "^7.1.2",
     "css-loader": "^5.1.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^7.20.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -39,11 +45,38 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "file-loader": "^6.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
     "process": "^0.11.10",
     "style-loader": "^2.0.0",
+    "ts-jest": "^26.5.3",
     "ts-loader": "^8.0.17",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0",
     "webpack-dev-server": "^3.11.2"
+  },
+  "jest": {
+    "clearMocks": true,
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.ts"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.ts",
+      "\\.(css|less)$": "identity-obj-proxy",
+      "^Api/(.*)$": "<rootDir>/src/api/$1",
+      "^Components/(.*)$": "<rootDir>/src/components/$1",
+      "^Hooks/(.*)$": "<rootDir>/src/hooks/$1",
+      "^Stores/(.*)$": "<rootDir>/src/stores/$1",
+      "^Utils/(.*)$": "<rootDir>/src/utils/$1",
+      "^Views/(.*)$": "<rootDir>/src/views/$1",
+      "^Constants/(.*)$": "<rootDir>/src/constants/$1"
+    },
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/**.tsx",
+      "<rootDir>/src/**/**.ts"
+    ],
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    }
   }
 }
