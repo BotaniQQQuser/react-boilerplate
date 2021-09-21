@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
+const BundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env, argv) => {
   const dir = process.env.WEBPACK_DIR || __dirname;
@@ -12,19 +13,20 @@ module.exports = (env, argv) => {
     new webpack.ProvidePlugin({
       process: 'process/browser',
     }),
+    // new BundleAnalyzer(),
   ];
 
   if (!isDev) {
     plugins.push(...[
       new CompressionPlugin({
-        filename: '[path].gz[query]',
+        filename: '[name][ext].gz[query]',
         algorithm: 'gzip',
         test: /\.js$|\.css$|\.html$/,
         threshold: 10240,
         minRatio: 0.7,
       }),
       new CompressionPlugin({
-        filename: '[path].br[query]',
+        filename: '[name][ext].br[query]',
         algorithm: 'brotliCompress',
         test: /\.js$|\.css$|\.html$/,
         threshold: 10240,
