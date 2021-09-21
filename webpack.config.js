@@ -9,27 +9,32 @@ module.exports = (env, argv) => {
 
   const plugins = [
     new webpack.optimize.AggressiveMergingPlugin(),
-    // new CompressionPlugin({
-    //   filename: '[path].gz[query]',
-    //   algorithm: 'gzip',
-    //   test: /\.js$|\.css$|\.html$/,
-    //   threshold: 10240,
-    //   minRatio: 0.7,
-    // }),
-    // new CompressionPlugin({
-    //   filename: '[path].br[query]',
-    //   algorithm: 'brotliCompress',
-    //   test: /\.js$|\.css$|\.html$/,
-    //   threshold: 10240,
-    //   minRatio: 0.7,
-    //   compressionOptions: {
-    //     level: 11,
-    //   },
-    // }),
     new webpack.ProvidePlugin({
       process: 'process/browser',
     }),
   ];
+
+  if (!isDev) {
+    plugins.push(...[
+      new CompressionPlugin({
+        filename: '[path].gz[query]',
+        algorithm: 'gzip',
+        test: /\.js$|\.css$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.7,
+      }),
+      new CompressionPlugin({
+        filename: '[path].br[query]',
+        algorithm: 'brotliCompress',
+        test: /\.js$|\.css$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.7,
+        compressionOptions: {
+          level: 11,
+        },
+      }),
+    ]);
+  }
 
   return {
     mode: isDev ? 'development' : 'production',
@@ -85,12 +90,14 @@ module.exports = (env, argv) => {
       ],
     },
     devServer: {
-      publicPath: '/',
-      host: 'localhost',
-      port: 9000,
-      disableHostCheck: true,
-      contentBase: path.resolve(dir, 'public'),
+      host: 'localhost.testkontur.ru',
+      port: 8080,
       hot: true,
+      https: true,
+      static: {
+        directory: path.resolve(dir, 'public'),
+        publicPath: '/',
+      },
     },
     plugins: [
       ...plugins,
